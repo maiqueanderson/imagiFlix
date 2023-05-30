@@ -3,22 +3,38 @@ import "./App.css";
 import Carousel from "./components/Carousel";
 import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
-import movies from "./mock/movies.mock";
+
 import CONST from "./data/constants";
+import Footer from "./components/Footer";
+
 
 function App() {
   const { URL, APISTRING } = CONST;
 
-  const [movie, setMovie] = useState<any>(null);
+  const [mainMovie, setMainMovie] = useState<any>(null);
+
+  const [movies, setMovies] = useState<any>(null);
+
+  const [series, setSeries] = useState<any>(null);
+
+
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
+      const moviesResponse = await fetch(
         `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
       );
-      const data = await response.json();
-      console.log(data.results[0]);
-      setMovie(data.results[0]);
+      const moviesData = await moviesResponse.json();
+      console.log(moviesData.results[0]);
+      setMainMovie(moviesData.results[0]);
+      setMovies(moviesData.results);
+
+      const seriesResponse = await fetch(
+        `${URL}/discover/tv${APISTRING}&sort_by=popularity.desc`
+      );
+      const seriesData = await seriesResponse.json();
+      setSeries(seriesData.results);  
+
     };
     fetchData();
   }, []);
@@ -26,13 +42,14 @@ function App() {
   return (
     <>
       <Hero
-        title={movie?.title}
-        score={movie?.vote_average}
-        image={movie?.backdrop_path}
+        title={mainMovie?.title}
+        score={mainMovie?.vote_average}
+        image={mainMovie?.backdrop_path}
       />
       <Navbar />
-      <Carousel title="Filmes" data={movies} />
-      <Carousel title="Filmes" data={movies} />
+      <Carousel title="Filmes Populates" data={movies}/>
+      <Carousel title="Series Populares" data={series} />
+      <Footer/>
     </>
   );
 }
