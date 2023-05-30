@@ -41,7 +41,7 @@ const Carousel = ({ title, data }: CarouselProps) => {
 
   const getCover = (cover?: string,) =>{
     if(cover){
-     return `${IMAGE_URL}/w500/${cover}` 
+     return `${IMAGE_URL}/w200/${cover}` 
     }
     return ''
   }
@@ -54,7 +54,7 @@ const Carousel = ({ title, data }: CarouselProps) => {
         {data?.map((movie, key) => (
           <Poster
             title={movie.title}
-            cover={getCover(movie.backdrop_path)}
+            cover={getCover(movie.poster_path ) }
             score={movie.vote_average}
             name={movie.name}
             key={key}
