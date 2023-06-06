@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 
 import CONST from "./data/constants";
 import Footer from "./components/Footer";
+import Loading from "./components/Loading";
 
 
 function App() {
@@ -16,6 +17,8 @@ function App() {
   const [movies, setMovies] = useState<any>(null);
 
   const [series, setSeries] = useState<any>(null);
+
+  const [loading, setLoading] = useState<boolean>(true);
 
 
 
@@ -34,13 +37,24 @@ function App() {
       );
       const seriesData = await seriesResponse.json();
       setSeries(seriesData.results);  
+      setLoading(false);
 
     };
     fetchData();
   }, []);
 
   return (
-    <>
+    <div className="bg-black text-white m-auto font-sans antialised">
+      {
+        loading && (
+          <>
+          <Loading/>
+          </>
+        )
+      }
+      {
+        !loading && (
+           <>
       <Hero
         title={mainMovie?.title}
         score={mainMovie?.vote_average}
@@ -51,6 +65,10 @@ function App() {
       <Carousel title="Series Populares" data={series} />
       <Footer/>
     </>
+        )
+      }
+    </div>
+    
   );
 }
 
